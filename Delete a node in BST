@@ -1,0 +1,84 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class Node{
+    int data;
+    Node left;
+    Node right;
+    Node(int val){
+        data=val;
+        left=right=null;
+    }
+}
+
+public class Solution {
+    
+    static Node insert(Node root,int val){
+    if(root==null) return new Node(val);
+    else if(val<root.data){
+        root.left=insert(root.left,val);
+    }
+    else{
+        root.right=insert(root.right,val);
+    }
+    return root;
+}
+        static Node min(Node root){
+        while(root.left!=null){
+            root=root.left;
+        }
+        return root;
+    }
+    static void inorder(Node root){
+        if(root==null) return;
+        inorder(root.left);
+        System.out.print(root.data+" ");
+        inorder(root.right);
+    }
+    
+    static Node delete(Node root,int key){
+        if(root==null) return null;
+        else if(key<root.data) {
+            root.left=delete(root.left,key);
+        }
+        else if(key>root.data) {
+            root.right=delete(root.right,key);
+        }
+        else{
+            if(root.left==null && root.right==null) return null;
+            else if(root.left==null){
+                return root.right;
+            }
+            else if(root.right==null){
+                return root.left;
+            }
+            else{
+                Node find=min(root.right);
+                root.data=find.data;
+                root.right=delete(root.right,find.data);
+            }
+        }
+         return root;
+    }
+
+
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int [] arr=new int [n];
+        for(int i=0;i<n;i++){
+            arr[i]=sc.nextInt();
+        }
+        int key=sc.nextInt();
+        Node root=new Node(arr[0]);
+        for(int i=1;i<n;i++){
+            root=insert(root,arr[i]);
+        }
+        root=delete(root,key);
+        inorder(root);
+      
+    }
+}
